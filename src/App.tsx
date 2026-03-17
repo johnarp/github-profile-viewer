@@ -4,7 +4,7 @@ import './App.css'
 
 function App() {
 	const [username, setUsername] = useState('')
-	const [user, setUser] = useState(null)
+	const [user, setUser] = useState<any>(null)
 
 	async function handleSearch() {
 		const response = await fetch(`https://api.github.com/users/${username}`)
