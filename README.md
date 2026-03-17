@@ -1,8 +1,12 @@
+<div align="center">
+
 # GitHub Profile Viewer
 
 A simple GitHub profile viewer built with React and TypeScript.
 
 Search any GitHub username and see their profile info pulled from the GitHub public API.
+
+</div>
 
 ## Stack
 
