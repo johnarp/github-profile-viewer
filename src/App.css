@@ -1,0 +1,92 @@
+.search {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.search input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-h);
+  font-size: 16px;
+  font-family: var(--sans);
+  outline: none;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: var(--accent-border);
+  }
+}
+
+.search button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.profile {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.profile img {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: 10%;
+}
+
+.profile-info h2 {
+  margin: 0 0 2px;
+}
+
+.profile-info > p {
+  color: var(--text);
+  font-size: 15px;
+}
+
+.profile-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+}
+
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.profile-stat {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.profile-stat span {
+  color: var(--accent);
+  font-weight: 500;
+}
