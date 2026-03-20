@@ -3,15 +3,31 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
+	// console.log(import.meta.env.VITE_GITHUB_TOKEN)
 	const [username, setUsername] = useState('')
 	const [user, setUser] = useState<any>(null)
 	const [repos, setRepos] = useState<any[]>([])
 
+function formatDate(iso: string) {
+	return new Date(iso).toLocaleDateString('en-US', {
+		month: 'long', day: 'numeric', year: 'numeric'
+	})
+}
+
 async function handleSearch() {
+	if (!username.trim()) return
+
+	const headers = { Authorization: `token ${import.meta.env.VITE_GITHUB_TOKEN}` }
+
 	const [userRes, reposRes] = await Promise.all([
-		fetch(`https://api.github.com/users/${username}`),
-		fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
+		fetch(`https://api.github.com/users/${username}`, { headers }),
+		fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`, { headers })
     ])
+	if (!userRes.ok) {
+		setUser(null)
+		setRepos([])
+		return
+	}
     const userData = await userRes.json()
     const reposData = await reposRes.json()
     setUser(userData)
@@ -35,6 +51,7 @@ async function handleSearch() {
 					<div className='profile-info'>
 						<h2>{user.name}</h2>
 						<p>{user.bio}</p>
+						{user.hireable && <p className='hireable'>Available for Hire</p>}
 						
 						<hr className='profile-divider'></hr>
 
@@ -42,17 +59,21 @@ async function handleSearch() {
 							<p className='profile-stat'>Location: <span>{user.location}</span></p>
 							<p className='profile-stat'>Company: <span>{user.company}</span></p>
 							<p className='profile-stat'>Email: <span>{user.email}</span></p>
-							<p className='profile-stat'>Blog: <span>{user.blog}</span></p>
+							<p className='profile-stat'>Blog: <span><a className='profile-link' href={user.blog} target='_blank'>{user.blog}</a></span></p>
 							<p className='profile-stat'>Followers: <span>{user.followers}</span></p>
 							<p className='profile-stat'>Following: <span>{user.following}</span></p>
 							<p className='profile-stat'>Repos: <span>{user.public_repos}</span></p>
+							<p className='profile-stat'>Gists: <span>{user.public_gists}</span></p>
 						</div>
 
 						<hr className='profile-divider'></hr>
 
 						<div className='profile-stats'>
-							<p className='profile-stat'>Joined: <span>{user.created_at}</span></p>
-							<p className='profile-stat'>View on GitHub: <span>{user.html_url}</span></p>
+							<p className='profile-stat'>Joined: <span>{formatDate(user.created_at)}</span></p>
+							{repos.length > 0 && (
+								<p className='profile-stat'>Last Push: <span>{formatDate(repos[0].pushed_at)}</span></p>
+							)}
+							<p className='profile-stat'><span><a className='profile-link' href={user.html_url} target='_blank'>View on GitHub</a></span></p>
 						</div>
 
 						<hr className='profile-divider'></hr>
