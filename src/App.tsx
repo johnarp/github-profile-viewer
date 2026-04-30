@@ -66,7 +66,11 @@ async function handleSearch() {
 								{user.type === 'Organization' ? 'Org' : 'User'}
 							</span>
 						</div>
-						<a className='profile-username' href={user.html_url} target='_blank'>@{user.login}</a>
+						<div>
+							<a className='profile-username' href={user.html_url} target='_blank'>@{user.login}</a>
+							<span> • </span>
+							<a className='profile-id'>#{user.id}</a>
+						</div>
 						<p>{user.bio}</p>
 						{user.hireable && <p className='hireable'>Available for Hire</p>}
 						

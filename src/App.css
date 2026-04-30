@@ -96,6 +96,16 @@
   &:hover { color: var(--accent); }
 }
 
+.profile-id {
+  font-size: 13.5px;
+  color: var(--text);
+  text-decoration: none;
+  margin-bottom: 6px;
+  margin-top: -3px;
+  width: fit-content;
+  /* &:hover { color: var(--accent); } */
+}
+
 .bio {
   color: var(--text);
   font-size: 14px;
