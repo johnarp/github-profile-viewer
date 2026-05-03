@@ -8,47 +8,38 @@ function App() {
 	const [user, setUser] = useState<any>(null)
 	const [repos, setRepos] = useState<any[]>([])
 
-function formatDate(iso: string) {
-	return new Date(iso).toLocaleDateString('en-US', {
-		month: 'long', day: 'numeric', year: 'numeric'
-	})
-}
-
-async function fetchWithFallback(url: string) {
-	const primary = import.meta.env.VITE_GITHUB_TOKEN
-	const secondary = import.meta.env.VITE_GITHUB_TOKEN_BACKUP
-
-	const res = await fetch(url, { headers: {Authorization: `token ${primary}` } })
-
-	if (res.status === 403) {
-		return fetch(url, { headers: { Authorization: `token ${secondary}` } })
+	function formatDate(iso: string) {
+		return new Date(iso).toLocaleDateString('en-US', {
+			month: 'long', day: 'numeric', year: 'numeric'
+		})
 	}
 
-	return res
-}
-
-async function handleSearch() {
-	if (!username.trim()) return
-
-	const [userRes, reposRes] = await Promise.all([
-		fetchWithFallback(`https://api.github.com/users/${username}`),
-		fetchWithFallback(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
-    ])
-	if (!userRes.ok) {
-		setUser(null)
-		setRepos([])
-		return
+	async function fetchWithFallback(githubPath: string) {
+		return fetch(`/api/github?path=${encodeURIComponent(githubPath)}`);
 	}
-    const userData = await userRes.json()
-    const reposData = await reposRes.json()
-    setUser(userData)
-    setRepos(reposData)
-}
+
+	async function handleSearch() {
+		if (!username.trim()) return
+
+		const [userRes, reposRes] = await Promise.all([
+			fetchWithFallback(`users/${username}`),
+			fetchWithFallback(`users/${username}/repos?sort=updated&per_page=6`)
+		]);
+		if (!userRes.ok) {
+			setUser(null)
+			setRepos([])
+			return
+		}
+		const userData = await userRes.json()
+		const reposData = await reposRes.json()
+		setUser(userData)
+		setRepos(reposData)
+	}
 
 	return (
 		<>
 			<div className='search'>
-				<input value={username} 
+				<input value={username}
 					onChange={e => setUsername(e.target.value)}
 					onKeyDown={e => e.key === 'Enter' && handleSearch()}
 					placeholder='Enter a GitHub Username'
@@ -73,7 +64,7 @@ async function handleSearch() {
 						</div>
 						<p>{user.bio}</p>
 						{user.hireable && <p className='hireable'>Available for Hire</p>}
-						
+
 						<hr className='profile-divider'></hr>
 
 						<div className='profile-stats'>
