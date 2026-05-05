@@ -7,6 +7,7 @@ function App() {
 	const [username, setUsername] = useState('')
 	const [user, setUser] = useState<any>(null)
 	const [repos, setRepos] = useState<any[]>([])
+	const [orgs, setOrgs] = useState<any[]>([])
 
 	function formatDate(iso: string) {
 		return new Date(iso).toLocaleDateString('en-US', {
@@ -21,9 +22,10 @@ function App() {
 	async function handleSearch() {
 		if (!username.trim()) return
 
-		const [userRes, reposRes] = await Promise.all([
+		const [userRes, reposRes, orgsRes] = await Promise.all([
 			fetchWithFallback(`users/${username}`),
-			fetchWithFallback(`users/${username}/repos?sort=updated&per_page=6`)
+			fetchWithFallback(`users/${username}/repos?sort=updated&per_page=6`),
+			fetchWithFallback(`users/${username}/orgs`)
 		]);
 		if (!userRes.ok) {
 			setUser(null)
@@ -32,8 +34,10 @@ function App() {
 		}
 		const userData = await userRes.json()
 		const reposData = await reposRes.json()
+		const orgsData = await orgsRes.json()
 		setUser(userData)
 		setRepos(reposData)
+		setOrgs(orgsData)
 	}
 
 	return (
@@ -86,6 +90,23 @@ function App() {
 								<p className='profile-stat'>Last Push: <span>{formatDate(repos[0].pushed_at)}</span></p>
 							)}
 						</div>
+
+						<hr className='profile-divider'></hr>
+
+						{orgs.length > 0 && (
+							<div className='repos'>
+								<h3>Organizations</h3>
+								<div className='repos-grid'>
+									{orgs.map(org => (
+										<a key={org.id} className='repo-card' href={`https://github.com/${org.login}`} target='_blank'>
+											<img src={org.avatar_url} style={{ width: 32, height: 32, borderRadius: 6 }} ></img>
+											<p className='repo-name'>{org.login}</p>
+											<p className='repo-desc'>{org.description || '-'}</p>
+										</a>
+									))}
+								</div>
+							</div>
+						)}
 
 						<hr className='profile-divider'></hr>
 
