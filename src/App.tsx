@@ -25,7 +25,7 @@ function App() {
 		const [userRes, reposRes, orgsRes] = await Promise.all([
 			fetchWithFallback(`users/${username}`),
 			fetchWithFallback(`users/${username}/repos?sort=updated&per_page=6`),
-			fetchWithFallback(`users/${username}/orgs`)
+			fetchWithFallback(`users/${username}/orgs?per_page=6`)
 		]);
 		if (!userRes.ok) {
 			setUser(null)
@@ -91,21 +91,22 @@ function App() {
 							)}
 						</div>
 
-						<hr className='profile-divider'></hr>
-
 						{orgs.length > 0 && (
-							<div className='repos'>
-								<h3>Organizations</h3>
-								<div className='repos-grid'>
-									{orgs.map(org => (
-										<a key={org.id} className='repo-card' href={`https://github.com/${org.login}`} target='_blank'>
-											<img src={org.avatar_url} style={{ width: 32, height: 32, borderRadius: 6 }} ></img>
-											<p className='repo-name'>{org.login}</p>
-											<p className='repo-desc'>{org.description || '-'}</p>
-										</a>
-									))}
+							<>
+								<hr className='profile-divider'></hr>
+								<div className='repos'>
+									<h3>Organizations</h3>
+									<div className='repos-grid'>
+										{orgs.map(org => (
+											<a key={org.id} className='repo-card' href={`https://github.com/${org.login}`} target='_blank'>
+												<img src={org.avatar_url} style={{ width: 32, height: 32, borderRadius: 6 }} ></img>
+												<p className='repo-name'>{org.login}</p>
+												<p className='repo-desc'>{org.description || '-'}</p>
+											</a>
+										))}
+									</div>
 								</div>
-							</div>
+							</>
 						)}
 
 						<hr className='profile-divider'></hr>

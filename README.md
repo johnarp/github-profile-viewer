@@ -39,7 +39,14 @@ The easiest way to access is going to the website: [https://github-profile-viewe
 
 Or, if you wish to use it locally, here are the steps:
 
-> Note: The current setup does not use VITE_ for the token and is server-side. In other words, instead of accessing GitHub's API through a token (with a high rate limit), you're instead accessing it through your IP (with a low rate limit). You may have to make changes to the code to use your own token.
+> Note: The API token is server-side and only runs on Vercel, or locally via `vercel dev`. Running `npm run dev` will not work.
+
+### Prerequisites
+
+- [GitHub Personal Access Token](https://github.com/settings/tokens)
+- [Vercel CLI](https://vercel.com/docs/cli) (`npm i -g vercel`)
+
+Rename `.env.example` to `.env` and fill in your tokens. `GITHUB_TOKEN_BACKUP` is optional and only used as a fallback.
 
 ### 1. Downloading the Code
 
@@ -56,17 +63,22 @@ npm install
 Through a terminal, navigate to the directory and use this command to run the app on your local network:
 
 ```
-npm run dev
+vercel dev
 ```
 
 Then open the IP address given in a browser.
 
 ## 🗺️ Roadmap
 
+- "View All" for repositories and organizations
+- Improve spacing of second headings
 - Website icon
+- Make user IDs copyable
 - List of repos a user has starred
 - Events / activity feed
-- separate GitHub Repository Viewer
+- Commit history
+- Separate GitHub Repository Viewer
+- "View All" for repos and orgs
 
 ## 📜 Disclaimer
 
